@@ -115,23 +115,23 @@ quantiles = quantiles.to_dict()
 
 def RScore(x,p,d):
     if x <= d[p][0.25]:
+        return 4
+    elif x <= d[p][0.50]:
+        return 3
+    elif x <= d[p][0.75]: 
+        return 2
+    else:
+        return 1
+    
+def FMScore(x,p,d):
+    if x <= d[p][0.25]:
         return 1
     elif x <= d[p][0.50]:
         return 2
     elif x <= d[p][0.75]: 
         return 3
     else:
-        return 4
-    
-def FMScore(x,p,d):
-    if x <= d[p][0.25]:
-        return 4
-    elif x <= d[p][0.50]:
-        return 3
-    elif x <= d[p][0.75]: 
-        return 2
-    else:
-        return 1                    
+        return 4                    
                          
 # If i had more custom functions, Functions should be included in different python file and this file should call it                 
                          
@@ -151,12 +151,56 @@ rfm[rfm['RFMScore']=='111'].sort_values('monetary_value', ascending=False).shape
 
 #SEGMENTS ACCORDING TO RFM 
 rfm['segment'] = np.nan
-rfm.loc[rfm['m_quartile'] ==1, 'segment'] = 'Highest Paying customer'
-rfm.loc[(rfm['r_quartile'] ==1) & (rfm['f_quartile'] ==1) & (rfm['m_quartile'] ==1), 'segment'] = 'Highly engaged customer'
-rfm.loc[(rfm['r_quartile'] !=1) & (rfm['f_quartile'] ==1) & (rfm['m_quartile'] !=1) , 'segment'] = 'Loyal customer'
-rfm.loc[((rfm['f_quartile'] ==1) & (rfm['m_quartile'] ==3)) | ((rfm['f_quartile'] ==1) & (rfm['m_quartile'] ==4)), 'segment'] = 'Promising customer'
-rfm.loc[(rfm['r_quartile'] ==1) & (rfm['f_quartile'] ==4)  , 'segment'] = 'New customer'
-rfm.loc[(rfm['r_quartile'] ==4) & (rfm['f_quartile'] ==4)  , 'segment'] = 'Prior loyal customers'
+rfm.loc[(rfm['r_quartile'] !=1) & (rfm['f_quartile'] ==4) & (rfm['m_quartile'] >=4) , 'segment'] = 'Loyal customers'
+rfm.loc[(rfm['r_quartile'] !=1) & (rfm['f_quartile'] ==3) & (rfm['m_quartile'] ==4) , 'segment'] = 'Loyal customers'
+rfm.loc[(rfm['r_quartile'] ==2) & (rfm['f_quartile'] ==4) & (rfm['m_quartile'] >=3) , 'segment'] = 'Loyal customers'
+rfm.loc[(rfm['r_quartile'] >=3) & (rfm['f_quartile'] ==4) & (rfm['m_quartile'] >=3) , 'segment'] = 'Loyal customers'
+
+rfm.loc[(rfm['r_quartile'] ==4) & (rfm['f_quartile'] ==4) & (rfm['m_quartile'] ==4), 'segment'] = 'Highly engaged customers'
+
+rfm.loc[(rfm['r_quartile'] !=1) & (rfm['f_quartile'] ==2) & (rfm['m_quartile'] ==3) , 'segment'] = 'Potentially Loyal customers'
+rfm.loc[(rfm['r_quartile'] !=1) & (rfm['f_quartile'] ==3) & (rfm['m_quartile'] ==2) , 'segment'] = 'Potentially Loyal customers'
+rfm.loc[(rfm['r_quartile'] !=1) & (rfm['f_quartile'] ==3) & (rfm['m_quartile'] ==3) , 'segment'] = 'Potentially Loyal customers'
+rfm.loc[(rfm['r_quartile'] !=1) & (rfm['f_quartile'] >=3) & (rfm['m_quartile'] ==1) , 'segment'] = 'Potentially Loyal customers'
+rfm.loc[(rfm['r_quartile'] !=1) & (rfm['f_quartile'] ==2) & (rfm['m_quartile'] ==4) , 'segment'] = 'Potentially Loyal customers'
+rfm.loc[(rfm['r_quartile'] ==2) & (rfm['f_quartile'] ==4) & (rfm['m_quartile'] ==3) , 'segment'] = 'Potentially Loyal customers'
+rfm.loc[(rfm['r_quartile'] ==2) & (rfm['f_quartile'] ==4) & (rfm['m_quartile'] ==2) , 'segment'] = 'Potentially Loyal customers'
+rfm.loc[(rfm['r_quartile'] ==3) & (rfm['f_quartile'] ==1) & (rfm['m_quartile'] ==4) , 'segment'] = 'Potentially Loyal customers'
+rfm.loc[(rfm['r_quartile'] ==3) & (rfm['f_quartile'] ==4) & (rfm['m_quartile'] ==2) , 'segment'] = 'Potentially Loyal customers'
+rfm.loc[(rfm['r_quartile'] ==4) & (rfm['f_quartile'] ==1) & (rfm['m_quartile'] ==4) , 'segment'] = 'Potentially Loyal customers'
+rfm.loc[(rfm['r_quartile'] ==4) & (rfm['f_quartile'] ==4) & (rfm['m_quartile'] ==2) , 'segment'] = 'Potentially Loyal customers'
+rfm.loc[(rfm['r_quartile'] ==4) & (rfm['f_quartile'] ==2) & (rfm['m_quartile'] ==2) , 'segment'] = 'Potentially Loyal customers'
+
+rfm.loc[(rfm['r_quartile'] ==4) & (rfm['f_quartile'] ==1) & (rfm['m_quartile'] <=3) , 'segment'] = 'New customers'
+rfm.loc[(rfm['r_quartile'] ==3) & (rfm['f_quartile'] ==1) & (rfm['m_quartile'] ==1) , 'segment'] = 'Promising New customers'
+
+rfm.loc[(rfm['r_quartile'] ==2) & (rfm['f_quartile'] ==2) & (rfm['m_quartile'] ==2) , 'segment'] = 'Need Attention customers'
+rfm.loc[(rfm['r_quartile'] ==3) & (rfm['f_quartile'] ==2) & (rfm['m_quartile'] ==2) , 'segment'] = 'Need Attention customers'
+
+rfm.loc[(rfm['r_quartile'] ==2) & (rfm['f_quartile'] ==2) & (rfm['m_quartile'] ==1) , 'segment'] = 'About to sleep customers'
+rfm.loc[(rfm['r_quartile'] ==3) & (rfm['f_quartile'] ==2) & (rfm['m_quartile'] ==1) , 'segment'] = 'About to sleep customers'
+
+rfm.loc[(rfm['r_quartile'] ==1) & (rfm['f_quartile'] <=2) & (rfm['m_quartile'] >=3) & (rfm['segment'].isnull()) , 'segment'] = 'At risk customers'
+rfm.loc[(rfm['r_quartile'] <=2) & (rfm['f_quartile'] <=2) & (rfm['m_quartile'] <=2) & (rfm['segment'].isnull()) , 'segment'] = 'Low spenders'
+
+#Check
+# rfm[rfm["segment"].isnull()][["r_quartile","f_quartile","m_quartile"]].drop_duplicates() 
+rfm.loc[(rfm['segment'].isnull()) , 'segment'] = 'Need Attention customers'
+
+
+# Segment	Description	                                                              R	      F	      M
+# Champions	Bought recently, buy often and spend the most	                        4   	4   	4 
+# Loyal Customers	Spend good money. Responsive to promotions	                    2 - 4	3 - 4	3 - 4
+# Potential Loyalist	Recent customers, spent good amount, bought more than once	3 - 4	1 - 3	1 - 3
+# New Customers	Bought more recently, but not often	                                4 - 4	<= 1	<= 1
+# Promising	Recent shoppers, but haven’t spent much	                                3 - 4	<= 1	<= 1
+# Need Attention	Above average recency, frequency & monetary values	            2 - 3	2 - 3	2 - 3
+# About To Sleep	Below average recency, frequency & monetary values	            2 - 3	<= 2	<= 2
+# At Risk	Spent big money, purchased often but long time ago	                    <= 2	2 - 4	2 - 4
+# Can’t Lose Them	Made big purchases and often, but long time ago	                <= 1	4   	4
+# Hibernating	Low spenders, low frequency, purchased long time ago	            1 - 2	1 - 2	1 - 2
+# Lost	Lowest recency, frequency & monetary scores	                                <= 2	<= 2	<= 2
+
 
 ####################################### RFM Customer Segmentation - SECOND METHODOLOGY (K-Means)#######################################
 #SEGMENTS ACCORDING TO k-means 
