@@ -1,5 +1,5 @@
 ## efoodBiProject
-This repo includes all the necessary files required for efood assignment.
+This repository includes all the necessary files and data required in order to replicate the efood assignment.
 ## General Information
 
 ## Instructions 								
