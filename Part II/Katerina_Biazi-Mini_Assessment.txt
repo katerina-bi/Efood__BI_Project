@@ -1,0 +1,13 @@
+SELECT TOP 10 city
+	 , COUNT(DISTINCT CASE WHEN cuisine_parent = 'Breakfast' THEN order_id ELSE NULL END) Breakfast_Orders
+	 , COUNT(DISTINCT BREAKFAST_USERS.user_id) Breakfast_Users
+	 , SUM(CASE WHEN ORDERS.user_id IS NOT NULL THEN basket ELSE 0 END)/COUNT(DISTINCT BREAKFAST_USERS.user_id) Average_Basket
+FROM ORDERS
+LEFT JOIN
+(
+SELECT DISTINCT user_id FROM ORDERS WHERE cuisine_parent = 'Breakfast'
+)BREAKFAST_USERS
+ON ORDERS.user_id = BREAKFAST_USERS.user_id
+GROUP BY CITY
+HAVING COUNT(*)>500
+ORDER BY COUNT(DISTINCT CASE WHEN cuisine_parent = 'Breakfast' THEN order_id ELSE NULL END) LIMIT 10
