@@ -9,8 +9,8 @@ Input is in the folder *Input_Files*/*PY_analysis* (.zip format which needs to b
 2 - Data used as an input for the business analytics service by Microsoft, PowerBI. They are the output of the afformentioned analysis (input 1).
 - Code 
 The code resigns in the folder named *Code*. In the process of generating the appropriate code, two kinds of methodologies were applied. For both methodlogies RMF KPIs were created.
-1 - The first methodology is based on segment-creating rules.
-2 - The second methodology is a K-means statistical analysis in order to properly identify the number of segments. A scoring was applied to the segmented customer groups based on the frequency, recency, and average basket amount.
+- 1 - The first methodology is based on segment-creating rules.
+- 2 - The second methodology is a K-means statistical analysis in order to properly identify the number of segments. A scoring was applied to the segmented customer groups based on the frequency, recency, and average basket amount.
 - Dashboard and Presentation
 The presentation and the dashboard are located in the *Visualization* folder (in .pptx and .pbix formats respectively. The dashboard file includes three tabs.
 1 - The first tab presents the first methodology that was used in the analysis.
